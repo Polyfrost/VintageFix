@@ -1,15 +1,15 @@
 package org.embeddedt.vintagefix.mixin.invisible_subchunks;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.chunk.CompiledChunk;
 import net.minecraft.util.EnumFacing;
 import org.embeddedt.vintagefix.ducks.IPathingSetVisibility;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
+
+import java.util.Set;
 
 @Mixin(RenderGlobal.class)
 public class MixinRenderGlobal {
@@ -17,10 +17,10 @@ public class MixinRenderGlobal {
      * @author MrGrim
      * @reason Prevent excessive removal of neighboring subchunks (MC-63020)
      */
-    @ModifyExpressionValue(method = "setupTerrain", at = @At(value = "INVOKE", target = "Ljava/util/Set;size()I", remap = false, ordinal = 0),
+    @Redirect(method = "setupTerrain", at = @At(value = "INVOKE", target = "Ljava/util/Set;size()I", remap = false, ordinal = 0),
         slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderGlobal;getVisibleFacings(Lnet/minecraft/util/math/BlockPos;)Ljava/util/Set;", ordinal = 0),
             to = @At(value = "INVOKE", target = "Lnet/minecraft/util/EnumFacing;getFacingFromVector(FFF)Lnet/minecraft/util/EnumFacing;", ordinal = 0)))
-    private int overrideOpposingSideCheck(int prevSize) {
+    private int overrideOpposingSideCheck(Set<EnumFacing> instance) {
         return 0;
     }
 

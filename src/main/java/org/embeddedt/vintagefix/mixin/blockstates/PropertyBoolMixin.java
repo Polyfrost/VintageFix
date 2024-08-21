@@ -36,7 +36,7 @@ public class PropertyBoolMixin {
      * @author embeddedt
      * @reason remove allowedValues comparison (Mojank...)
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public boolean equals(Object other) {
         if(this == other)
             return true;
@@ -47,7 +47,7 @@ public class PropertyBoolMixin {
      * @author embeddedt
      * @reason do not waste time hashing a map that is always the same
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public int hashCode() {
         return super.hashCode();
     }

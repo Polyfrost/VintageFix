@@ -1,24 +1,31 @@
-rootProject.name = "vintagefix"
+@file:Suppress("PropertyName")
 
 pluginManagement {
   repositories {
-    maven {
-      // RetroFuturaGradle
-      name = "GTNH Maven"
-      url = uri("http://jenkins.usrv.eu:8081/nexus/content/groups/public/")
-      isAllowInsecureProtocol = true
-      mavenContent {
-        includeGroup("com.gtnewhorizons")
-        includeGroup("com.gtnewhorizons.retrofuturagradle")
-      }
-    }
     gradlePluginPortal()
     mavenCentral()
-    mavenLocal()
+    maven("https://repo.polyfrost.org/releases") // Adds the Polyfrost maven repository to get Polyfrost Gradle Toolkit
+  }
+  plugins {
+    val pgtVersion = "0.6.7" // Sets the default versions for Polyfrost Gradle Toolkit
+    id("org.polyfrost.multi-version.root") version pgtVersion
   }
 }
 
-plugins {
-  // Automatic toolchain provisioning
-  id("org.gradle.toolchains.foojay-resolver-convention") version "0.4.0"
+val mod_name: String by settings
+
+// Configures the root project Gradle name based on the value in `gradle.properties`
+rootProject.name = mod_name
+rootProject.buildFileName = "root.gradle.kts"
+
+// Adds all of our build target versions to the classpath if we need to add version-specific code.
+listOf(
+  "1.8.9-forge",
+  "1.12.2-forge"
+).forEach { version ->
+  include(":$version")
+  project(":$version").apply {
+    projectDir = file("versions/$version")
+    buildFileName = "../../build.gradle.kts"
+  }
 }

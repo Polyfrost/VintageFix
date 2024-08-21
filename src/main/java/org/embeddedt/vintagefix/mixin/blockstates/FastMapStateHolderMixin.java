@@ -105,7 +105,7 @@ public abstract class FastMapStateHolderMixin implements FastMapStateHolder<IBlo
      * @author embeddedt
      * @reason states are unique, no need to waste time hashing the map
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public int hashCode() {
         return System.identityHashCode(this);
     }

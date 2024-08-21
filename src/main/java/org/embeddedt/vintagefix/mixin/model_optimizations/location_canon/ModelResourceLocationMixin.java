@@ -24,7 +24,7 @@ public abstract class ModelResourceLocationMixin extends ResourceLocation {
         super(unused, resourceName);
     }
 
-    @Inject(method = "<init>(Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)V", at = @At("TAIL"))
+    @Inject(method = "<init>(Lnet/minecraft/util/ResourceLocation;Ljava/lang/String;)V", at = @At("RETURN"))
     private void constructTail(ResourceLocation location, String variantIn, CallbackInfo ci) {
         // Do not use new strings for path and namespace, and deduplicate the variant string
         this.path = location.getPath();

@@ -1,14 +1,13 @@
 [
   {
-    "modid": "vintagefix",
-    "name": "VintageFix",
-    "version": "${modVersion}",
-    "mcversion": "1.12.2",
-    "description": "A backport of FerriteCore to 1.12.2",
+    "modid": "${id}",
+    "name": "${name}",
+    "version": "${version}",
+    "mcversion": "${mcVersionStr}",
+    "description": "",
     "url": "https://github.com/GTNewHorizons/RetroFuturaGradle/",
     "credits": "",
     "logoFile": "vintagefix.png",
-    "authorList": ["embeddedt"],
-    "dependencies": ["mixinbooter"]
+    "authorList": ["Polyfrost"]
   }
 ]

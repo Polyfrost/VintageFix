@@ -41,7 +41,7 @@ public abstract class PropertyEnumMixin<T extends Enum<T> & IStringSerializable>
      * @author asiekierka
      * @reason If the value classes are equal, we can skip checking all the entries in the maps.
      */
-    @Redirect(method = "equals", at = @At(value = "INVOKE", target = "Ljava/util/Map;equals(Ljava/lang/Object;)Z", ordinal = 0))
+    @Redirect(method = "equals", at = @At(value = "INVOKE", target = "Ljava/util/Map;equals(Ljava/lang/Object;)Z", ordinal = 0), remap = false)
     private boolean areNameMapsEqual(Map map, Object o, Object p_equals_1_) {
         return ((PropertyEnum<?>)p_equals_1_).getValueClass() == this.getValueClass() || map.equals(o);
     }
@@ -50,7 +50,7 @@ public abstract class PropertyEnumMixin<T extends Enum<T> & IStringSerializable>
      * @author embeddedt
      * @reason cache
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public int hashCode() {
         return vfix_hashCode;
     }

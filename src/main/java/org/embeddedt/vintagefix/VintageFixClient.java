@@ -1,6 +1,5 @@
 package org.embeddedt.vintagefix;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -8,22 +7,18 @@ import net.minecraft.client.resources.*;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.*;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.embeddedt.vintagefix.core.MixinConfigPlugin;
 import org.embeddedt.vintagefix.core.VintageFixCore;
-import org.embeddedt.vintagefix.dynamicresources.CTMHelper;
 import org.embeddedt.vintagefix.dynamicresources.IWeakTextureMap;
 import org.embeddedt.vintagefix.impl.Deduplicator;
 import org.embeddedt.vintagefix.transformercache.TransformerCache;
-import org.embeddedt.vintagefix.util.VersionProtester;
 
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
@@ -34,9 +29,6 @@ import java.util.concurrent.ForkJoinTask;
 public class VintageFixClient {
     public VintageFixClient() {
         ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), new byte[0], "field_71444_a");
-        if(Loader.isModLoaded("ctm")) {
-            MinecraftForge.EVENT_BUS.register(CTMHelper.class);
-        }
         if(VintageFixCore.OPTIFINE)
             VintageFix.LOGGER.fatal("OptiFine detected, there may be issues");
     }
@@ -125,8 +117,6 @@ public class VintageFixClient {
             tracker.tick();
     }
 
-    private static boolean protestVersion = MixinConfigPlugin.isMixinClassApplied("mixin.version_protest.F3Change");
-
     // highest to minimize number of entries that need shuffling
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRenderF3(RenderGameOverlayEvent.Text event) {
@@ -140,9 +130,6 @@ public class VintageFixClient {
         // only show when OptiFine isn't present, as it adds its own
         if(!VintageFixCore.OPTIFINE)
             event.getRight().add(2, String.format("Allocation rate: %03dMB /s", tracker.getAllocationRate()));
-        if(protestVersion) {
-            event.getLeft().set(0, VersionProtester.protest(event.getLeft().get(0)));
-        }
     }
 
     private static float gameStartTime = -1;

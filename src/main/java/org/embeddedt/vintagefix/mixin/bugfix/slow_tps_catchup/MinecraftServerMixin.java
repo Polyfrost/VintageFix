@@ -84,7 +84,7 @@ public abstract class MinecraftServerMixin
      * @reason I would have liked to only replace what was inside the "try" block, but there was no reasonable way
      * to do that. This is a complete rewrite of this function outside of error handling.
      */
-    @Overwrite
+    @Overwrite(remap = false)
     public void run()
     {
         try

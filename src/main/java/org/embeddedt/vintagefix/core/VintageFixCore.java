@@ -1,27 +1,20 @@
 package org.embeddedt.vintagefix.core;
 
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableList;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import org.embeddedt.vintagefix.jarcache.JarDiscovererCache;
-import org.embeddedt.vintagefix.transformercache.TransformerCache;
 import org.embeddedt.vintagefix.util.DummyList;
-import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
-import zone.rong.mixinbooter.IEarlyMixinLoader;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @IFMLLoadingPlugin.Name("VintageFix")
-@IFMLLoadingPlugin.MCVersion("1.12.2")
-public class VintageFixCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
+public class VintageFixCore implements IFMLLoadingPlugin {
     public static boolean OPTIFINE;
     public static boolean VINTAGIUM;
     public static boolean SPONGE;
@@ -61,9 +54,6 @@ public class VintageFixCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Nullable
     @Override
     public String getSetupClass() {
-        if(JarDiscovererCache.isActive()) {
-            JarDiscovererCache.load();
-        }
         replaceLaunchCLCaches();
         return null;
     }
@@ -114,9 +104,6 @@ public class VintageFixCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
     private static boolean mixinFixApplied = false;
 
     private static void applyMixinFix() {
-        OPTIFINE = classExists("ofdev.launchwrapper.OptifineDevTweakerWrapper") || classExists("optifine.OptiFineForgeTweaker");
-        SPONGE = classExists("org.spongepowered.mod.SpongeCoremod");
-        VINTAGIUM = classExists("me.jellysquid.mods.sodium.client.SodiumMixinTweaker");
         /* https://github.com/FabricMC/Mixin/pull/99 */
         try {
             Field groupMembersField = InjectorGroupInfo.class.getDeclaredField("members");
@@ -129,12 +116,12 @@ public class VintageFixCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
         }
     }
 
-    @Override
-    public List<String> getMixinConfigs() {
-        if(!mixinFixApplied) {
-            applyMixinFix();
-            mixinFixApplied = true;
-        }
-        return ImmutableList.of("mixins.vintagefix.init.json", "mixins.vintagefix.json");
-    }
+    //@Override
+    //public List<String> getMixinConfigs() {
+    //    if(!mixinFixApplied) {
+    //        applyMixinFix();
+    //        mixinFixApplied = true;
+    //    }
+    //    return ImmutableList.of("mixins.vintagefix.init.json", "mixins.vintagefix.json");
+    //}
 }
