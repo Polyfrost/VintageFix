@@ -2,9 +2,9 @@ package org.embeddedt.vintagefix.core;
 
 import com.google.common.cache.CacheBuilder;
 import net.minecraft.launchwrapper.LaunchClassLoader;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.embeddedt.vintagefix.util.DummyList;
+import org.embeddedt.vintagefix.util.Reflector;
 import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
 
 import javax.annotation.Nullable;
@@ -68,13 +68,13 @@ public class VintageFixCore implements IFMLLoadingPlugin {
         }
         try {
             // Disable packageManifests cache
-            ObfuscationReflectionHelper.findField(LaunchClassLoader.class, "packageManifests").set(cl, new ConcurrentHashMap() {
+            Reflector.findField(LaunchClassLoader.class, "packageManifests").set(cl, new ConcurrentHashMap() {
                 @Override
                 public Object put(Object key, Object value) {
                     return null;
                 }
             });
-            Field resourceCacheField = ObfuscationReflectionHelper.findField(LaunchClassLoader.class, "resourceCache");
+            Field resourceCacheField = Reflector.findField(LaunchClassLoader.class, "resourceCache");
             Map resourceCacheMap = (Map)resourceCacheField.get(cl);
             if(resourceCacheMap instanceof ConcurrentHashMap) {
                 // Not replaced by any other optimization mod, let's take it over ourselves

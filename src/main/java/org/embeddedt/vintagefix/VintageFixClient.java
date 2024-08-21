@@ -18,6 +18,8 @@ import org.embeddedt.vintagefix.core.MixinConfigPlugin;
 import org.embeddedt.vintagefix.core.VintageFixCore;
 import org.embeddedt.vintagefix.dynamicresources.IWeakTextureMap;
 import org.embeddedt.vintagefix.impl.Deduplicator;
+import org.embeddedt.vintagefix.mixin.texture_animation.AccessorTextureMap;
+import org.embeddedt.vintagefix.render.SpriteFinderImpl;
 import org.embeddedt.vintagefix.transformercache.TransformerCache;
 
 import java.lang.management.GarbageCollectorMXBean;
@@ -93,6 +95,13 @@ public class VintageFixClient {
                     registerSpriteIfPresent(map, f.getFlowing());
             }
             discoveredTextures = null;
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void createSpriteFinder(TextureStitchEvent.Post event) {
+        if(event.getMap() instanceof SpriteFinderImpl.SpriteFinderAccess) {
+            ((SpriteFinderImpl.SpriteFinderAccess)event.getMap()).fabric_setSpriteFinder(new SpriteFinderImpl(((AccessorTextureMap)event.getMap()).vfix$getUploadedSprites(), event.getMap()));
         }
     }
 

@@ -86,8 +86,8 @@ public class MixinConfigPlugin implements IMixinConfigPlugin {
     public void acceptTargets(Set<String> set, Set<String> set1) {
     }
 
-    private static final List<String> OPTIFINE_DISABLED_PACKAGES = ImmutableList.of("textures", "bugfix.entity_disappearing", "invisible_subchunks");
-    private static final List<String> VINTAGIUM_DISABLED_PACKAGES = ImmutableList.of("bugfix.entity_disappearing", "invisible_subchunks");
+    private static final List<String> VINTAGIUM_DISABLED_PACKAGES = ImmutableList.of("chunk_rendering", "bugfix.entity_disappearing", "invisible_subchunks");
+    private static final List<String> OPTIFINE_DISABLED_PACKAGES = ImmutableList.<String>builder().addAll(VINTAGIUM_DISABLED_PACKAGES).add("mixin.textures").build();
 
     public static boolean isMixinClassApplied(String name) {
         // texture optimization causes issues when OF is installed
