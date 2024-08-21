@@ -18,6 +18,23 @@ public abstract class FerriteCoreImmutableMapAccess<K, V> extends ImmutableMap<K
     @Override
     public abstract ImmutableSet<K> createKeySet();
 
+    //#if MC==11202
     @Override
     public abstract ImmutableCollection<V> createValues();
+    //#else
+    //$$ private transient ImmutableCollection<V> values;
+    //$$
+    //$$ /**
+    //$$  * Returns an immutable collection of the values in this map. The values are
+    //$$  * in the same order as the parameters used to build this map.
+    //$$  */
+    //$$ @Override
+    //$$ @org.jetbrains.annotations.NotNull
+    //$$ public ImmutableCollection<V> values() {
+    //$$     ImmutableCollection<V> result = values;
+    //$$     return (result == null) ? values = createValues() : result;
+    //$$ }
+    //$$
+    //$$ public abstract ImmutableCollection<V> createValues();
+    //#endif
 }

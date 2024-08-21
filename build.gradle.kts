@@ -59,7 +59,7 @@ loom {
     }
   }
   // Configures the name of the mixin "refmap"
-  mixin.defaultRefmapName.set("=mixins.${mod_id}.refmap.json")
+  mixin.defaultRefmapName.set("mixins.${mod_id}.refmap.json")
 }
 
 // Creates the shade/shadow configuration, so we can include libraries inside our mod, rather than having to add them separately.

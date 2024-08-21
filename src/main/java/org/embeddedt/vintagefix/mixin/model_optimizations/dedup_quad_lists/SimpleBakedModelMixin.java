@@ -30,7 +30,7 @@ public class SimpleBakedModelMixin {
     protected List<BakedQuad> generalQuads;
 
     // Target all constructors, Forge adds an argument to the "main" constructor
-    @Inject(method = "<init>", at = @At("TAIL"))
+    @Inject(method = "<init>", at = @At("RETURN"))
     private void minimizeFaceLists(CallbackInfo ci) {
         this.generalQuads = ModelSidesImpl.minimizeUnculled(this.generalQuads);
         this.faceQuads = ModelSidesImpl.minimizeCulled(this.faceQuads);

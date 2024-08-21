@@ -84,6 +84,7 @@ public abstract class MinecraftServerMixin
      * @reason I would have liked to only replace what was inside the "try" block, but there was no reasonable way
      * to do that. This is a complete rewrite of this function outside of error handling.
      */
+    @SuppressWarnings("AccessStaticViaInstance")
     @Overwrite(remap = false)
     public void run()
     {
@@ -110,14 +111,14 @@ public abstract class MinecraftServerMixin
                     long runningBehind = before - referenceTime;
 
                     if (runningBehind > 2000L && after - this.timeOfLastWarning >= 15000L) {
-                        LOGGER.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", runningBehind, (runningBehind - 2000L - 1L) / 50L + 1L);
+                        this.LOGGER.warn("Can\'t keep up! Did the system time change, or is the server overloaded? Running {}ms behind, skipping {} tick(s)", runningBehind, (runningBehind - 2000L - 1L) / 50L + 1L);
                         referenceTime = before - 2000L;
                         runningBehind = 2000L;
                         this.timeOfLastWarning = after;
                     }
 
                     if (tickLength < 0L || runningBehind < -50L) {
-                        LOGGER.warn("Time ran backwards! Did the system time change?");
+                        this.LOGGER.warn("Time ran backwards! Did the system time change?");
                         tickLength = 0L;
                         runningBehind = 0L;
                         referenceTime = before;
@@ -148,7 +149,7 @@ public abstract class MinecraftServerMixin
         }
         catch (Throwable throwable1)
         {
-            LOGGER.error("Encountered an unexpected exception", throwable1);
+            this.LOGGER.error("Encountered an unexpected exception", throwable1);
             CrashReport crashreport;
 
             if (throwable1 instanceof ReportedException)
@@ -164,11 +165,11 @@ public abstract class MinecraftServerMixin
 
             if (crashreport.saveToFile(file1))
             {
-                LOGGER.error("This crash report has been saved to: {}", file1.getAbsolutePath());
+                this.LOGGER.error("This crash report has been saved to: {}", file1.getAbsolutePath());
             }
             else
             {
-                LOGGER.error("We were unable to save this crash report to disk.");
+                this.LOGGER.error("We were unable to save this crash report to disk.");
             }
 
             net.minecraftforge.fml.common.FMLCommonHandler.instance().expectServerStopped(); // has to come before finalTick to avoid race conditions
@@ -182,7 +183,7 @@ public abstract class MinecraftServerMixin
             }
             catch (Throwable throwable)
             {
-                LOGGER.error("Exception stopping the server", throwable);
+                this.LOGGER.error("Exception stopping the server", throwable);
             }
             finally
             {
